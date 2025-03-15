@@ -9,6 +9,7 @@ import route from 'koa-route';
 import send from 'koa-send';
 import session from 'koa-session';
 import serve from 'koa-static';
+import compress from 'koa-compress';
 
 import type { Context } from './context';
 import { dataSource } from './data_source';
@@ -37,6 +38,12 @@ async function init(): Promise<void> {
 
   const apolloServer = await initializeApolloServer();
   await apolloServer.start();
+
+  app.use(compress(
+    {
+      br: false,
+    }
+  ));
 
   app.use(
     route.all(
