@@ -7,6 +7,8 @@ export const container = () => css`
   transition-property: opacity;
   transition-timing-function: linear;
 
+  
+
   &:hover {
     opacity: 0.8;
   }

@@ -20,13 +20,15 @@ export const ProductCard: FC<Props> = ({ product }) => {
   const { activeOffer } = useActiveOffer(product);
   const price = activeOffer?.price ?? product.price;
 
+  const fileName = thumbnailFile?.filename.replace(/images\/[^/]+/, 'images/webp/products').replace(/\.jpg$/, '.webp');
+
   return (
     <Anchor href={`/product/${product.id}`}>
       <div className={styles.inner()}>
         {thumbnailFile ? (
           <div className={styles.image()}>
             <AspectRatio ratioHeight={9} ratioWidth={16}>
-              <Image height={126} src={thumbnailFile.filename} width={224} />
+              <Image height={126} src={fileName} width={224} />
             </AspectRatio>
           </div>
         ) : null}

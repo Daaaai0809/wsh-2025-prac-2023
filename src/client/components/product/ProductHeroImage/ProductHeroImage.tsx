@@ -45,11 +45,15 @@ export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
 
   const [imageDataUrl, setImageDataUrl] = useState<string>();
 
+  // images/**/...なのをimages/webp/**/*.webpに変換
+  const filename = thumbnailFile?.filename.replace(/images\/[^/]+/, 'images/webp/products').replace(/\.jpg$/, '.webp');
+
   useEffect(() => {
-    if (thumbnailFile == null) {
+    if (filename === undefined) {
       return;
     }
-    loadImageAsDataURL(thumbnailFile.filename).then((dataUrl) => setImageDataUrl(dataUrl));
+
+    loadImageAsDataURL(filename).then((dataUrl) => setImageDataUrl(dataUrl.replace(/png/, 'webp')));
   }, [thumbnailFile]);
 
   if (imageDataUrl === undefined) {
@@ -64,7 +68,7 @@ export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
             <Anchor href={`/product/${product.id}`}>
               <div className={styles.container()}>
                 <AspectRatio ratioHeight={9} ratioWidth={16}>
-                  <img className={styles.image()} src={imageDataUrl} />
+                  <img className={styles.image()} src={filename} alt={product.name} />
                 </AspectRatio>
 
                 <div className={styles.overlay()}>
