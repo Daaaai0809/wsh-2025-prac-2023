@@ -35,6 +35,8 @@ import * as styles from './ProductHeroImage.styles';
 //   return canvas.toDataURL();
 // }
 
+const FAIL_IMAGE_URL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+
 export async function loadImageAsDataURL(url: string): Promise<string> {
   try {
     const response = await fetch(url);
@@ -75,7 +77,7 @@ export async function loadImageAsDataURL(url: string): Promise<string> {
 }
 
 type Props = {
-  product: ProductFragmentResponse;
+  product?: ProductFragmentResponse;
   title: string;
 };
 
@@ -84,7 +86,7 @@ const isEqual = (prev: Props, next: Props) => {
 };
 
 export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
-  const thumbnailFile = product.media.find((productMedia) => productMedia.isThumbnail)?.file;
+  const thumbnailFile = product?.media.find((productMedia) => productMedia.isThumbnail)?.file;
 
   const [imageDataUrl, setImageDataUrl] = useState<string>();
 
@@ -100,7 +102,7 @@ export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
   }, [thumbnailFile]);
 
   if (imageDataUrl === undefined) {
-    return null;
+    setImageDataUrl(FAIL_IMAGE_URL);
   }
 
   return (
@@ -108,32 +110,34 @@ export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
       {({ deviceType }) => {
         return (
           <WidthRestriction>
-            <Anchor href={`/product/${product.id}`}>
-              <div className={styles.container()}>
-                <AspectRatio ratioHeight={9} ratioWidth={16}>
-                  <img className={styles.image()} src={filename} alt={product.name} />
-                </AspectRatio>
+            { product && (
+              <Anchor href={`/product/${product.id}`}>
+                <div className={styles.container()}>
+                  <AspectRatio ratioHeight={9} ratioWidth={16}>
+                    <img className={styles.image()} src={filename} alt={product.name} />
+                  </AspectRatio>
 
-                <div className={styles.overlay()}>
-                  <p
-                    className={classNames(styles.title(), {
-                      [styles.title__desktop()]: deviceType === DeviceType.DESKTOP,
-                      [styles.title__mobile()]: deviceType === DeviceType.MOBILE,
-                    })}
-                  >
-                    {title}
-                  </p>
-                  <p
-                    className={classNames(styles.description(), {
-                      [styles.description__desktop()]: deviceType === DeviceType.DESKTOP,
-                      [styles.description__mobile()]: deviceType === DeviceType.MOBILE,
-                    })}
-                  >
-                    {product.name}
-                  </p>
+                  <div className={styles.overlay()}>
+                    <p
+                      className={classNames(styles.title(), {
+                        [styles.title__desktop()]: deviceType === DeviceType.DESKTOP,
+                        [styles.title__mobile()]: deviceType === DeviceType.MOBILE,
+                      })}
+                    >
+                      {title}
+                    </p>
+                    <p
+                      className={classNames(styles.description(), {
+                        [styles.description__desktop()]: deviceType === DeviceType.DESKTOP,
+                        [styles.description__mobile()]: deviceType === DeviceType.MOBILE,
+                      })}
+                    >
+                      {product.name}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Anchor>
+              </Anchor>
+  )}
           </WidthRestriction>
         );
       }}
