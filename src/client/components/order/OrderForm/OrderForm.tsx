@@ -1,7 +1,7 @@
 import { useFormik } from 'formik';
 import _ from 'lodash';
 import type { ChangeEventHandler, FC } from 'react';
-import zipcodeJa from 'zipcode-ja';
+// import zipcodeJa from 'zipcode-ja';
 
 import { PrimaryButton } from '../../foundation/PrimaryButton';
 import { TextInput } from '../../foundation/TextInput';
@@ -19,6 +19,35 @@ type Props = {
   onSubmit: (orderFormValue: OrderFormValue) => void;
 };
 
+type ZipCodeResponse = {
+  status: number;
+  message: string;
+  results: {
+    zipcode: string;
+    prefcode: string;
+    address1: string;
+    address2: string;
+    address3: string;
+    kana1: string;
+    kana2: string;
+    kana3: string;
+  }[];
+}
+
+const zipCodeFetcher = async (zipCode: string) => {
+  const response = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zipCode}`);
+  const data = await response.json() as ZipCodeResponse;
+  return data;
+}
+
+export const zipCodeFormatter = async (zipCode: string) => {
+  const zipCodeResponse = await zipCodeFetcher(zipCode);
+
+  const { address1, address2, address3 } = zipCodeResponse.results[0];
+
+  return [address1, address2, address3];
+}
+
 export const OrderForm: FC<Props> = ({ onSubmit }) => {
   const formik = useFormik<OrderFormValue>({
     initialValues: {
@@ -30,11 +59,11 @@ export const OrderForm: FC<Props> = ({ onSubmit }) => {
     onSubmit,
   });
 
-  const handleZipcodeChange: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const handleZipcodeChange: ChangeEventHandler<HTMLInputElement> = async (event) => {
     formik.handleChange(event);
 
     const zipCode = event.target.value;
-    const address = [...(_.cloneDeep(zipcodeJa)[zipCode]?.address ?? [])];
+    const address = await zipCodeFormatter(zipCode);
     const prefecture = address.shift();
     const city = address.join(' ');
 
