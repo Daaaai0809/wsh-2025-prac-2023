@@ -56,8 +56,18 @@ async function init(): Promise<void> {
     }),
   );
 
-  app.use(serve(rootResolve('dist')));
-  app.use(serve(rootResolve('public')));
+  app.use(serve(rootResolve('dist'), {
+    maxage: 365 * 24 * 60 * 60 * 1000,
+    setHeaders: (res) => {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }));
+  app.use(serve(rootResolve('public'), {
+    maxage: 365 * 24 * 60 * 60 * 1000,
+    setHeaders: (res) => {
+      res.setHeader('Cache-Control', 'public, max-age=31536000');
+    }
+  }));
 
   app.use(async (ctx) => await send(ctx, rootResolve('/dist/index.html')));
 
