@@ -1,7 +1,7 @@
 import CanvasKitInit from 'canvaskit-wasm';
 import CanvasKitWasmUrl from 'canvaskit-wasm/bin/canvaskit.wasm?url';
 import classNames from 'classnames';
-import _ from 'lodash';
+// import _ from 'lodash';
 import { memo, useEffect, useState } from 'react';
 import type { FC } from 'react';
 
@@ -38,6 +38,10 @@ async function loadImageAsDataURL(url: string): Promise<string> {
 type Props = {
   product: ProductFragmentResponse;
   title: string;
+};
+
+const isEqual = (prev: Props, next: Props) => {
+  return prev.product === next.product && prev.title === next.title;
 };
 
 export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
@@ -96,6 +100,6 @@ export const ProductHeroImage: FC<Props> = memo(({ product, title }) => {
       }}
     </GetDeviceType>
   );
-}, _.isEqual);
+}, isEqual);
 
 ProductHeroImage.displayName = 'ProductHeroImage';

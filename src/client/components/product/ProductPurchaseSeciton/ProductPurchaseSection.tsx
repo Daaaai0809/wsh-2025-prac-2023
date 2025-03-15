@@ -1,14 +1,15 @@
-import _ from 'lodash';
+// import _ from 'lodash';
 import type { FC } from 'react';
 import { memo } from 'react';
 
 import type { ProductFragmentResponse } from '../../../graphql/fragments';
-import { Icon } from '../../foundation/Icon';
+// import { Icon } from '../../foundation/Icon';
 import { OutlineButton } from '../../foundation/OutlineButton';
 import { PrimaryAnchor } from '../../foundation/PrimaryAnchor';
 import { PrimaryButton } from '../../foundation/PrimaryButton';
 
 import * as styles from './ProductPurchaseSection.styles';
+import { FaCheckCircle } from 'react-icons/fa';
 
 type Props = {
   product: ProductFragmentResponse | undefined;
@@ -17,6 +18,10 @@ type Props = {
   onUpdateCartItem: (productId: number, count: number) => void;
   onOpenSignInModal: () => void;
 };
+
+const isEqual = (prev: Props, next: Props) => {
+  return prev.product === next.product && prev.amountInCart === next.amountInCart && prev.isAuthUser === next.isAuthUser;
+}
 
 export const ProductPurchaseSection: FC<Props> = memo(
   ({ amountInCart, isAuthUser, onOpenSignInModal, onUpdateCartItem, product }) => {
@@ -51,7 +56,10 @@ export const ProductPurchaseSection: FC<Props> = memo(
       <div className={styles.container()}>
         <p className={styles.amount()}>
           <span className={styles.checkIcon()}>
-            <Icon color="#3BA175" height={18} type="FaCheckCircle" width={18} />
+            {/* <Icon color="#3BA175" height={18} type="FaCheckCircle" width={18} /> */}
+            <span style={{ color: '#3BA175', height: 18, width: 18 }}>
+              <FaCheckCircle />
+            </span>
           </span>
           <span>{amountInCart}個 カートに追加済み</span>
         </p>
@@ -66,7 +74,7 @@ export const ProductPurchaseSection: FC<Props> = memo(
       </div>
     );
   },
-  _.isEqual,
+  isEqual,
 );
 
 ProductPurchaseSection.displayName = 'ProductPurchaseSection';

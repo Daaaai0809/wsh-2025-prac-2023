@@ -1,6 +1,5 @@
 import type { FormikErrors } from 'formik';
 import { useFormik } from 'formik';
-import _ from 'lodash';
 import type { FC } from 'react';
 import { memo } from 'react';
 import * as z from 'zod';
@@ -21,6 +20,10 @@ type Props = {
   hasSignedIn: boolean;
   onSubmitReview: (reviewForm: ReviewForm) => void;
 };
+
+const isEqual = (prev: Props, next: Props) => {
+  return prev.reviews === next.reviews && prev.hasSignedIn === next.hasSignedIn;
+}
 
 type ReviewForm = {
   comment: string;
@@ -71,6 +74,6 @@ export const ReviewSection: FC<Props> = memo(({ hasSignedIn, onSubmitReview, rev
       )}
     </div>
   );
-}, _.isEqual);
+}, isEqual);
 
 ReviewSection.displayName = 'ReviewSection';

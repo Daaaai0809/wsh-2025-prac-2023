@@ -5,6 +5,8 @@ export const featureList = () => css`
   flex-direction: column;
   gap: 24px;
   margin-top: 40px;
+  // CLS対策
+  min-height: 100vh;
 `;
 
 export const feature = () => css`
