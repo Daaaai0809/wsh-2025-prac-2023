@@ -46,7 +46,7 @@ manualChunks: {
           }),
         ],
       },
-      target: 'es2015',
+      target: 'es2020',
     },
     plugins: [
       react(),
