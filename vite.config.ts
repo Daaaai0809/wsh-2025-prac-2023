@@ -8,6 +8,8 @@ import wasm from 'vite-plugin-wasm';
 
 import { getFileList } from './tools/get_file_list';
 
+import { visualizer } from 'rollup-plugin-visualizer';
+
 const publicDir = path.resolve(__dirname, './public');
 const getPublicFileList = async (targetPath: string) => {
   const filePaths = await getFileList(targetPath);
@@ -31,6 +33,14 @@ export default defineConfig(async () => {
         output: {
           experimentalMinChunkSize: 40960,
         },
+        plugins: [
+          visualizer({
+            filename: 'dist/stats.html',
+            open: true,
+            gzipSize: true,
+            brotliSize: true,
+          }),
+        ],
       },
       target: 'es2015',
     },
