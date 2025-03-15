@@ -46,12 +46,12 @@ manualChunks: {
           }),
         ],
       },
-      target: 'es2020',
+      target: 'esnext',
     },
     plugins: [
       react(),
       wasm(),
-      topLevelAwait(),
+      // topLevelAwait(),
       ViteEjsPlugin({
         module: '/src/client/index.tsx',
         title: '買えるオーガニック',
