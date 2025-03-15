@@ -32,6 +32,10 @@ export default defineConfig(async () => {
       rollupOptions: {
         output: {
           experimentalMinChunkSize: 40960,
+manualChunks: {
+            client: ['src/client/index.tsx'],
+            server: ['src/server/index.ts'],
+          }
         },
         plugins: [
           visualizer({
