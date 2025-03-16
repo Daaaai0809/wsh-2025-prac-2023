@@ -7,17 +7,20 @@ export const container = () => css`
   transition-property: opacity;
   transition-timing-function: linear;
 
-  
-
   &:hover {
     opacity: 0.8;
   }
 `;
 
-export const image = () => css`
-  height: 100%;
+export const image = (ratioWidth: number, ratioHeight: number) => css`
   object-fit: cover;
   width: 100%;
+  height: 100%;
+  aspect-ratio: ${ratioWidth} / ${ratioHeight};
+  display: block;
+  position: relative;
+  object-position: center;
+  z-index: 1;
 `;
 
 export const overlay = () => css`
@@ -32,6 +35,7 @@ export const overlay = () => css`
   padding: 16px 24px;
   position: absolute;
   right: 0;
+  z-index: 2;
 `;
 
 export const title = () => css`

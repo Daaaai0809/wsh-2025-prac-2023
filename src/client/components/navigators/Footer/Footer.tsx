@@ -28,7 +28,7 @@ export const Footer: FC = () => {
               ))}
             </ul>
             <NavLink to="/">
-              <Image src="/icons/logo.webp" />
+              <Image src="/icons/logo.webp" loading='lazy' />
             </NavLink>
           </footer>
         );

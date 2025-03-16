@@ -5,15 +5,17 @@ import * as styles from './Image.styles';
 
 type Props = Omit<ComponentProps<'img'>, 'className'> & {
   fill?: boolean;
+  ratioHeight?: number;
+  ratioWidth?: number;
 };
 
-export const Image: FC<Props> = ({ fill, ...rest }) => {
+export const Image: FC<Props> = ({ fill, ratioHeight, ratioWidth, ...rest }) => {
   return (
     <img
       className={classNames(styles.container(), {
-        [styles.container__fill()]: fill === true,
+        [styles.container__fill(ratioWidth, ratioHeight)]: fill === true,
       })}
-      loading="eager"
+      loading={rest.loading ?? 'eager'}
       {...rest}
     />
   );
