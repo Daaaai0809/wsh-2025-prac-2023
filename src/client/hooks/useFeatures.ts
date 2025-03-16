@@ -8,5 +8,5 @@ export const useFeatures = () => {
 
   const features = featuresResult.data?.features;
 
-  return { features };
+  return { features, ...featuresResult };
 };

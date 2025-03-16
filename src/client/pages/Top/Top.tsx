@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import { useMemo, useState, type FC } from 'react';
 import { Helmet } from 'react-helmet';
 
 import { Layout } from '../../components/application/Layout';
@@ -10,12 +10,30 @@ import { useRecommendation } from '../../hooks/useRecommendation';
 import * as styles from './Top.styles';
 
 export const Top: FC = () => {
-  const { recommendation } = useRecommendation();
-  const { features } = useFeatures();
+  const { recommendation, loading: loadingReccomendation } = useRecommendation();
+  const { features, loading: loadingFeatures } = useFeatures();
 
-  if (recommendation === undefined || features === undefined) {
-    return null;
-  }
+  const recommendationProduct = useMemo(() => {
+    if (recommendation === undefined) {
+      return undefined;
+    }
+    
+    return recommendation.product;
+  }, [recommendation, loadingReccomendation]);
+
+  const featuresList = useMemo(() => {
+    if (features === undefined) {
+      return [];
+    }
+
+    return features;
+  }, [features, loadingFeatures]);
+
+  // if (loadingReccomendation || loadingFeatures) {
+  //   return <div style={{
+  //     height: '100vh',
+  //   }}></div>
+  // }
 
   return (
     <>
@@ -24,11 +42,11 @@ export const Top: FC = () => {
       </Helmet>
       <Layout>
         <div>
-          <ProductHeroImage product={recommendation.product} title="今週のオススメ" />
+          <ProductHeroImage product={recommendationProduct} title="今週のオススメ" />
 
-          { features && (
+          { featuresList && (
             <div className={styles.featureList()}>
-              {features.map((featureSection) => {
+              {featuresList.map((featureSection) => {
                 return (
                   <div key={featureSection.id} className={styles.feature()}>
                     <h2 className={styles.featureHeading()}>{featureSection.title}</h2>
