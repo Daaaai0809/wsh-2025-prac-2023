@@ -23,12 +23,10 @@ export const Top: FC = () => {
         <title>買えるオーガニック</title>
       </Helmet>
       <Layout>
-        { features.length === 0 ? <div style={{
-          minHeight: "100vh",
-        }}></div> :
-          <div>
-            <ProductHeroImage product={recommendation.product} title="今週のオススメ" />
+        <div>
+          <ProductHeroImage product={recommendation.product} title="今週のオススメ" />
 
+          { features && (
             <div className={styles.featureList()}>
               {features.map((featureSection) => {
                 return (
@@ -39,8 +37,8 @@ export const Top: FC = () => {
                 );
               })}
             </div>
-          </div>
-        }
+          )}
+        </div>
       </Layout>
     </>
   );
