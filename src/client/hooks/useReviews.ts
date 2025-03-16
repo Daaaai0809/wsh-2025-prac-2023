@@ -29,5 +29,5 @@ export const useReviews = (productId: number | undefined) => {
 
   const reviews = reviewsResult.data?.product.reviews;
 
-  return { reviews };
+  return { reviews, ...reviewsResult };
 };

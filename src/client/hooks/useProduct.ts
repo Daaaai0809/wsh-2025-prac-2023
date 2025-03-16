@@ -15,5 +15,5 @@ export const useProduct = (productId: number) => {
 
   const product = productResult.data?.product;
 
-  return { product };
+  return { product, ...productResult };
 };
