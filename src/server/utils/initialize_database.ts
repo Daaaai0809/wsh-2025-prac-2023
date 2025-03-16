@@ -6,12 +6,14 @@ import { DATABASE_PATH, DATABASE_SEED_PATH } from './database_paths';
 export const initializeDatabase = async () => {
   await fs.copyFile(DATABASE_SEED_PATH, DATABASE_PATH);
 
-  // product.idにインデックスを追加
+  // インデックスを追加
   const db = new Database(DATABASE_PATH);
-  db.serialize(() => {
-    db.run('CREATE INDEX idx_feature_id ON feature_item (product_id)', (err) => {
+  await new Promise<void>((resolve, reject) => {
+    db.run('CREATE INDEX idx_feature_id ON feature_item (productId)', (err) => {
       if (err) {
-        console.error(err);
+        reject(err);
+      } else {
+        resolve();
       }
     });
   });
