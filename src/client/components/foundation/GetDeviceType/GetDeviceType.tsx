@@ -12,31 +12,39 @@ type Props = {
 };
 
 export class GetDeviceType extends Component<Props> {
-  private _timer: number | null;
   private _windowWidth: number;
+  private _debounceTimeout: number | null = null;
 
   constructor(props: Props) {
     super(props);
     this._windowWidth = window.innerWidth;
-    this._timer = null;
   }
 
   componentDidMount(): void {
-    this._checkIsDesktop();
+    window.addEventListener('resize', this._handleResize);
   }
 
   componentWillUnmount(): void {
-    if (this._timer != null) {
-      window.clearImmediate(this._timer);
+    window.removeEventListener('resize', this._handleResize);
+    if (this._debounceTimeout) {
+      clearTimeout(this._debounceTimeout);
     }
   }
 
-  private _checkIsDesktop() {
-    this._windowWidth = window.innerWidth;
-    this.forceUpdate(() => {
-      this._timer = window.setImmediate(this._checkIsDesktop.bind(this));
-    });
-  }
+  private _handleResize = () => {
+    // すでにタイマーがあればクリア
+    if (this._debounceTimeout) {
+      clearTimeout(this._debounceTimeout);
+    }
+    // 200ms後に処理を実行
+    this._debounceTimeout = window.setTimeout(() => {
+      const newWidth = window.innerWidth;
+      if (newWidth !== this._windowWidth) {
+        this._windowWidth = newWidth;
+        this.forceUpdate();
+      }
+    }, 200);
+  };
 
   render() {
     const { children: render } = this.props;
